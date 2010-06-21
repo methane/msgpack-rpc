@@ -20,13 +20,22 @@ def teardown():
 def test_client():
     client = Client(tcp.TCPTransport, ('localhost', PORT), {})
 
-    f1 = client.send_request('echo', 'foo')
-    f2 = client.send_request('echo', 'bar')
-    f3 = client.send_request('echo', 'baz')
+    err, res = client.call_request('echo', 'foo')
+    assert err is None
+    assert res == 'foo'
 
-    assert f2.result() == 'bar'
-    assert f1.result() == 'foo'
-    assert f3.result() == 'baz'
+    err, res = client.call_request('echo', 'bar')
+    assert err is None
+    assert res == 'bar'
+
+    # now client doesn't support asynchronous call.
+    #f1 = client.send_request('echo', 'foo')
+    #f2 = client.send_request('echo', 'bar')
+    #f3 = client.send_request('echo', 'baz')
+
+    #assert f2.result() == 'bar'
+    #assert f1.result() == 'foo'
+    #assert f3.result() == 'baz'
 
 if __name__ == '__main__':
     setup()
